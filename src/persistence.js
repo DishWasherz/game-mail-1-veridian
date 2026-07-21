@@ -34,6 +34,12 @@ export function saveState(state) {
 }
 
 export function resetState() {
+  const current = loadState();
+  const bestTime = current.bestTime;
   localStorage.removeItem(STORAGE_KEY);
   localStorage.removeItem('gm_credentials');
+  if (bestTime) {
+    const fresh = { ...DEFAULT_STATE, bestTime };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(fresh));
+  }
 }

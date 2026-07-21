@@ -14,6 +14,7 @@ import {
 let state;
 let credentials;
 let currentView = 'login';
+const seenFolders = new Set();
 
 export function getState() { return state; }
 export function getCredentials() { return credentials; }
@@ -240,7 +241,11 @@ function render(params = {}) {
       break;
     case 'inbox':
       renderInbox(app);
-      trackEvent('folder_viewed', { account: state.currentInbox, folder: state.currentFolder || 'inbox' });
+      const folderKey = `${state.currentInbox}/${state.currentFolder || 'inbox'}`;
+      if (!seenFolders.has(folderKey)) {
+        seenFolders.add(folderKey);
+        trackEvent('folder_viewed', { account: state.currentInbox, folder: state.currentFolder || 'inbox' });
+      }
       if (state.currentInbox === 'daniel' && !state.efbDelivered) {
         checkEfbTrigger();
       }

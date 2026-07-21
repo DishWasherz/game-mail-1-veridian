@@ -2,10 +2,11 @@ import { navigate, getState, getEmailData, doReset } from './app.js';
 import { TALLY_PLAYTEST_URL, TALLY_CASE02_URL, GAME_URL } from './config.js';
 
 function formatDuration(ms) {
-  if (!ms) return '0:00';
+  if (!ms) return 'under 1m';
   const totalSecs = Math.floor(ms / 1000);
   const h = Math.floor(totalSecs / 3600);
   const m = Math.floor((totalSecs % 3600) / 60);
+  if (totalSecs < 60) return 'under 1m';
   if (h > 0) return `${h}h${String(m).padStart(2, '0')}`;
   return `${m}m`;
 }
