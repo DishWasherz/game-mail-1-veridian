@@ -87,6 +87,7 @@ function updateEmailList(el) {
     const starred = isEmailStarred(email.id);
     const row = document.createElement('div');
     row.className = `email-row ${read ? 'read' : 'unread'}`;
+    row.setAttribute('data-email-id', email.id);
 
     const isSent = folder === 'sent';
     let displayFrom;
@@ -143,12 +144,17 @@ export function renderInbox(container) {
   const accountEmail = inbox === 'daniel' ? 'd.hartman@veridian-corp.com' : 'sarahc@gmail.com';
   const folders = getFolderTabs(inbox);
 
+  // Unread count for inbox tab
+  const allInboxEmails = getEmailsForCurrentFolder();
+  const unreadCount = allInboxEmails.filter(e => !isEmailRead(e.id)).length;
+
   const el = document.createElement('div');
   el.className = 'inbox-screen';
 
-  const folderTabsHtml = folders.map(f =>
-    `<button class="folder-tab ${f.id === folder ? 'active' : ''}" data-folder="${f.id}">${f.label}</button>`
-  ).join('');
+  const folderTabsHtml = folders.map(f => {
+    const count = (f.id === 'inbox' && f.id === folder && unreadCount > 0) ? ` <span class="folder-tab-count">${unreadCount}</span>` : '';
+    return `<button class="folder-tab ${f.id === folder ? 'active' : ''}" data-folder="${f.id}">${f.label}${count}</button>`;
+  }).join('');
 
   el.innerHTML = `
     <header class="inbox-header">
@@ -170,6 +176,7 @@ export function renderInbox(container) {
       <button class="toolbar-btn ${showStarredOnly ? 'active' : ''}" id="starFilterBtn">Starred</button>
       <button class="toolbar-btn" id="sortBtn">${sortNewest ? 'Newest first' : 'Oldest first'}</button>
     </div>
+    ${(state.efbDelivered && !isEmailRead('efb') && inbox === 'daniel' && folder === 'inbox') ? '<div class="new-message-banner" id="newMsgBanner">1 new message</div>' : ''}
     <div class="inbox-scroll-container" id="inboxScrollContainer">
       <div class="email-list" id="emailList"></div>
       ${folder === 'inbox' ? '<div class="archive-msg">Older conversations have been archived.</div>' : ''}
@@ -185,6 +192,19 @@ export function renderInbox(container) {
   const scrollContainer = el.querySelector('#inboxScrollContainer');
   if (scrollContainer && savedScroll) {
     scrollContainer.scrollTop = savedScroll;
+  }
+
+  // New message banner click
+  const banner = el.querySelector('#newMsgBanner');
+  if (banner) {
+    banner.addEventListener('click', () => {
+      const efbRow = el.querySelector('[data-email-id="efb"]');
+      if (efbRow) {
+        efbRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        efbRow.classList.add('email-row-highlight');
+        setTimeout(() => efbRow.classList.remove('email-row-highlight'), 1500);
+      }
+    });
   }
 
   // Folder tabs
@@ -283,6 +303,14 @@ export function renderEmailView(container, email) {
     const btn = el.querySelector('#starBtnEmail');
     btn.classList.toggle('starred', isEmailStarred(email.id));
   });
+
+  const onEscape = (e) => {
+    if (e.key === 'Escape') {
+      document.removeEventListener('keydown', onEscape);
+      navigate('inbox');
+    }
+  };
+  document.addEventListener('keydown', onEscape);
 
   // Check for final batch completion
   if (email._isDynamic && email.id && typeof email.id === 'string' && email.id.startsWith('F')) {

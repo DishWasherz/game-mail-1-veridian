@@ -454,6 +454,45 @@ html, body {
   border-color: var(--brand);
 }
 
+/* New Message Banner */
+.new-message-banner {
+  padding: 8px 20px;
+  background: #eef4ff;
+  border-bottom: 1px solid #d0e0f5;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.15s;
+}
+
+.new-message-banner:hover {
+  background: #ddeaff;
+}
+
+/* Row highlight on scroll-to */
+.email-row-highlight {
+  animation: row-flash 1.5s ease-out;
+}
+
+@keyframes row-flash {
+  0% { background: #eef4ff; }
+  100% { background: transparent; }
+}
+
+/* Folder tab unread count */
+.folder-tab-count {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 10px;
+  margin-left: 6px;
+}
+
 /* Scroll Container */
 .inbox-scroll-container {
   overflow-y: auto;
