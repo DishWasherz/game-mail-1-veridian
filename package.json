@@ -1,0 +1,19 @@
+{
+  "name": "game-mail",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "node build/parse-content.cjs && vite build",
+    "preview": "vite preview",
+    "parse": "node build/parse-content.cjs",
+    "test": "node build/test-flow.cjs"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "posthog-js": "^1.405.3"
+  }
+}
