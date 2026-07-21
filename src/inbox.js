@@ -144,17 +144,12 @@ export function renderInbox(container) {
   const accountEmail = inbox === 'daniel' ? 'd.hartman@veridian-corp.com' : 'sarahc@gmail.com';
   const folders = getFolderTabs(inbox);
 
-  // Unread count for inbox tab
-  const allInboxEmails = getEmailsForCurrentFolder();
-  const unreadCount = allInboxEmails.filter(e => !isEmailRead(e.id)).length;
-
   const el = document.createElement('div');
   el.className = 'inbox-screen';
 
-  const folderTabsHtml = folders.map(f => {
-    const count = (f.id === 'inbox' && f.id === folder && unreadCount > 0) ? ` <span class="folder-tab-count">${unreadCount}</span>` : '';
-    return `<button class="folder-tab ${f.id === folder ? 'active' : ''}" data-folder="${f.id}">${f.label}${count}</button>`;
-  }).join('');
+  const folderTabsHtml = folders.map(f =>
+    `<button class="folder-tab ${f.id === folder ? 'active' : ''}" data-folder="${f.id}">${f.label}</button>`
+  ).join('');
 
   el.innerHTML = `
     <header class="inbox-header">
