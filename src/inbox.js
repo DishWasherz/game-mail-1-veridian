@@ -8,7 +8,6 @@ import { trackEvent } from './analytics.js';
 
 let searchTerm = '';
 let sortNewest = true;
-let showStarredOnly = false;
 let scrollPositions = {};
 
 function scrollKey() {
@@ -60,9 +59,6 @@ function updateEmailList(el) {
   if (searchTerm) {
     emails = emails.filter(e => matchesSearch(e, searchTerm));
   }
-  if (showStarredOnly) {
-    emails = emails.filter(e => isEmailStarred(e.id));
-  }
   emails = [...emails].sort((a, b) => {
     const da = parseEmailDate(a.date);
     const db = parseEmailDate(b.date);
@@ -100,10 +96,11 @@ function updateEmailList(el) {
     const displayDate = email.date.replace(/^[A-Z][a-z]{2}\s/, '');
 
     const isNewFb = email._isDynamic && typeof email.id === 'string' && email.id.startsWith('F') && !read;
+    const bodyPreview = (email.body || '').replace(/\n/g, ' ').slice(0, 90);
     row.innerHTML = `
       <button class="star-btn ${starred ? 'starred' : ''}" data-id="${email.id}">&#9733;</button>
       <div class="email-row-from">${displayFrom}</div>
-      <div class="email-row-subject" data-from="${displayFrom} -">${isNewFb ? '<span class="new-chip">NEW</span> ' : ''}${email.subject}</div>
+      <div class="email-row-content">${isNewFb ? '<span class="new-chip">NEW</span> ' : ''}<span class="email-row-subject">${email.subject}</span><span class="email-row-preview"> - ${bodyPreview}</span></div>
       <div class="email-row-date">${displayDate}</div>
     `;
 
@@ -129,12 +126,14 @@ function getFolderTabs(inbox) {
     return [
       { id: 'inbox', label: 'Inbox' },
       { id: 'sent', label: 'Sent' },
-      { id: 'drafts', label: 'Drafts' }
+      { id: 'drafts', label: 'Drafts' },
+      { id: 'starred', label: 'Starred' }
     ];
   }
   return [
     { id: 'inbox', label: 'Inbox' },
-    { id: 'sent', label: 'Sent' }
+    { id: 'sent', label: 'Sent' },
+    { id: 'starred', label: 'Starred' }
   ];
 }
 
@@ -144,40 +143,53 @@ export function renderInbox(container) {
   const folder = getCurrentFolder();
   const accountEmail = inbox === 'daniel' ? 'd.hartman@veridian-corp.com' : 'sarahc@gmail.com';
   const folders = getFolderTabs(inbox);
+  const initial = inbox === 'daniel' ? 'D' : 'S';
 
   const el = document.createElement('div');
   el.className = 'inbox-screen';
 
-  const folderTabsHtml = folders.map(f =>
-    `<button class="folder-tab ${f.id === folder ? 'active' : ''}" data-folder="${f.id}">${f.label}</button>`
+  const sidebarFolders = folders.map(f =>
+    `<button class="sidebar-folder ${f.id === folder ? 'active' : ''}" data-folder="${f.id}">${f.label}</button>`
   ).join('');
 
   el.innerHTML = `
-    <header class="inbox-header">
-      <div class="inbox-header-left">
-        <div class="inbox-logo">V</div>
-        <h1 class="inbox-title">Veridian Webmail</h1>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo">V</div>
+        <span class="sidebar-title">Veridian Webmail</span>
       </div>
-      <div class="inbox-header-right">
-        <span class="inbox-user">${accountEmail}</span>
-        <button class="header-btn" id="boardBtn" title="Investigation Board">Board</button>
-        <button class="header-btn" id="caseFileBtn" title="Case File">Case</button>
-        ${state.caseFileSeen ? '<button class="header-btn" id="caseFileEndBtn" title="Case File">File</button>' : ''}
-        <button class="header-btn" id="logoutBtn">Sign Out</button>
+      <div class="sidebar-badge">READ-ONLY — FORENSIC COPY</div>
+      <nav class="sidebar-folders">${sidebarFolders}</nav>
+      <div class="sidebar-divider"></div>
+      <nav class="sidebar-section">
+        <span class="sidebar-section-label">INVESTIGATION</span>
+        <button class="sidebar-folder" id="sidebarBoardBtn">Board</button>
+        <button class="sidebar-folder" id="sidebarCaseFileBtn">Case File</button>
+        ${state.caseFileSeen ? '<button class="sidebar-folder" id="sidebarCaseFileEndBtn">File</button>' : ''}
+      </nav>
+    </aside>
+    <main class="mail-main">
+      <header class="mail-topbar">
+        <button class="hamburger-btn" id="hamburgerBtn">&#9776;</button>
+        <div class="topbar-search-wrap">
+          <input type="text" class="topbar-search" id="inboxSearch" placeholder="Search mail..." value="${searchTerm}">
+        </div>
+        <div class="topbar-actions">
+          <button class="toolbar-btn" id="sortBtn">${sortNewest ? 'Newest first' : 'Oldest first'}</button>
+        </div>
+        <div class="topbar-account" id="accountChip">
+          <div class="account-avatar">${initial}</div>
+          <span class="account-email">${accountEmail}</span>
+          <button class="account-signout" id="logoutBtn">Sign out</button>
+        </div>
+      </header>
+      ${(state.caseClosed && !state.caseFileSeen) ? '<div class="case-closed-banner" id="caseClosedBanner">Investigation closed. View the case file.</div>' : ''}
+      ${(state.efbDelivered && !isEmailRead('efb') && inbox === 'daniel' && folder === 'inbox') ? '<div class="new-message-banner" id="newMsgBanner">1 new message</div>' : ''}
+      <div class="inbox-scroll-container" id="inboxScrollContainer">
+        <div class="email-list" id="emailList"></div>
+        ${folder === 'inbox' ? '<div class="archive-msg">Older conversations have been archived.</div>' : ''}
       </div>
-    </header>
-    ${(state.caseClosed && !state.caseFileSeen) ? '<div class="case-closed-banner" id="caseClosedBanner">Investigation closed. View the case file.</div>' : ''}
-    <div class="folder-tabs">${folderTabsHtml}</div>
-    <div class="inbox-toolbar">
-      <input type="text" class="inbox-search" id="inboxSearch" placeholder="Search emails..." value="${searchTerm}">
-      <button class="toolbar-btn ${showStarredOnly ? 'active' : ''}" id="starFilterBtn">Starred</button>
-      <button class="toolbar-btn" id="sortBtn">${sortNewest ? 'Newest first' : 'Oldest first'}</button>
-    </div>
-    ${(state.efbDelivered && !isEmailRead('efb') && inbox === 'daniel' && folder === 'inbox') ? '<div class="new-message-banner" id="newMsgBanner">1 new message</div>' : ''}
-    <div class="inbox-scroll-container" id="inboxScrollContainer">
-      <div class="email-list" id="emailList"></div>
-      ${folder === 'inbox' ? '<div class="archive-msg">Older conversations have been archived.</div>' : ''}
-    </div>
+    </main>
   `;
 
   container.appendChild(el);
@@ -213,17 +225,17 @@ export function renderInbox(container) {
     });
   }
 
-  // Folder tabs
-  el.querySelectorAll('.folder-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      setFolder(tab.dataset.folder);
+  // Sidebar folders
+  el.querySelectorAll('.sidebar-folder[data-folder]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setFolder(btn.dataset.folder);
       searchTerm = '';
       showStarredOnly = false;
       navigate('inbox');
     });
   });
 
-  // Event listeners
+  // Sidebar starred acts as a folder filter
   el.querySelector('#inboxSearch').addEventListener('input', (e) => {
     searchTerm = e.target.value;
     updateEmailList(el);
@@ -235,24 +247,33 @@ export function renderInbox(container) {
     updateEmailList(el);
   });
 
-  el.querySelector('#starFilterBtn').addEventListener('click', () => {
-    showStarredOnly = !showStarredOnly;
-    el.querySelector('#starFilterBtn').classList.toggle('active', showStarredOnly);
-    updateEmailList(el);
-  });
-
   el.querySelector('#logoutBtn').addEventListener('click', handleLogout);
 
-  const caseFileEndBtn = el.querySelector('#caseFileEndBtn');
+  el.querySelector('#sidebarBoardBtn').addEventListener('click', () => navigate('board'));
+  el.querySelector('#sidebarCaseFileBtn').addEventListener('click', showCaseFile);
+
+  const caseFileEndBtn = el.querySelector('#sidebarCaseFileEndBtn');
   if (caseFileEndBtn) {
     caseFileEndBtn.addEventListener('click', () => navigate('casefile'));
   }
 
-  el.querySelector('#boardBtn').addEventListener('click', () => {
-    navigate('board');
+  // Mobile hamburger
+  el.querySelector('#hamburgerBtn').addEventListener('click', () => {
+    el.querySelector('#sidebar').classList.toggle('sidebar-open');
   });
+}
 
-  el.querySelector('#caseFileBtn').addEventListener('click', showCaseFile);
+function senderInitials(name) {
+  const parts = name.replace(/[^a-zA-Z\s]/g, '').trim().split(/\s+/);
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+  return (parts[0] || 'X').slice(0, 2).toUpperCase();
+}
+
+function senderColor(name) {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  const hue = Math.abs(hash) % 360;
+  return `hsl(${hue}, 40%, 45%)`;
 }
 
 export function renderEmailView(container, email) {
@@ -261,37 +282,31 @@ export function renderEmailView(container, email) {
   const body = getDisplayBody(email);
   const inbox = getCurrentInbox();
   const folder = getCurrentFolder();
+  const toDisplay = email.to || (inbox === 'daniel' ? 'Daniel Hartman' : 'sarahc@gmail.com');
+  const initials = senderInitials(email.from);
+  const avatarColor = senderColor(email.from);
 
   const el = document.createElement('div');
   el.className = 'email-view-screen';
 
-  let metaHtml = `<div class="email-meta-from"><strong>From:</strong> ${email.from}</div>`;
-  metaHtml += `<div class="email-meta-to"><strong>To:</strong> ${email.to || (inbox === 'daniel' ? 'Daniel Hartman' : 'sarahc@gmail.com')}</div>`;
-  if (email.cc) {
-    metaHtml += `<div class="email-meta-cc"><strong>CC:</strong> ${email.cc}</div>`;
-  }
-  metaHtml += `<div class="email-meta-date"><strong>Date:</strong> ${email.date}</div>`;
-
   el.innerHTML = `
-    <header class="inbox-header">
-      <div class="inbox-header-left">
-        <button class="header-btn" id="backBtn">&larr; Back</button>
-      </div>
-      <div class="inbox-header-right">
-        <button class="header-btn" id="boardBtnEmail" title="Investigation Board">Board</button>
-        <button class="header-btn" id="caseFileBtnEmail" title="Case File">Case</button>
-      </div>
-    </header>
+    <div class="emailview-topbar">
+      <button class="emailview-back" id="backBtn">&#8592; Back to ${folder === 'sent' ? 'Sent' : 'Inbox'}</button>
+      <button class="email-view-star ${isEmailStarred(email.id) ? 'starred' : ''}" id="starBtnEmail">
+        <span class="email-view-star-icon">&#9733;</span>
+        <span class="email-view-star-label">Star</span>
+      </button>
+    </div>
     <div class="email-view">
-      <div class="email-view-top">
-        <div class="email-view-top-left">
-          <h2 class="email-view-subject">${email.subject}</h2>
-          <div class="email-view-meta">${metaHtml}</div>
+      <h2 class="email-view-subject">${email.subject || '(No Subject)'}</h2>
+      <div class="email-view-header">
+        <div class="email-view-avatar" style="background:${avatarColor}">${initials}</div>
+        <div class="email-view-sender-block">
+          <div class="email-view-sender-name">${email.from}</div>
+          <div class="email-view-sender-to">to ${toDisplay}</div>
+          ${email.cc ? `<div class="email-view-sender-cc">cc ${email.cc}</div>` : ''}
         </div>
-        <button class="email-view-star ${isEmailStarred(email.id) ? 'starred' : ''}" id="starBtnEmail">
-          <span class="email-view-star-icon">&#9733;</span>
-          <span class="email-view-star-label">Mark as starred</span>
-        </button>
+        <div class="email-view-date">${email.date}</div>
       </div>
       <div class="email-view-body">${formatBody(body)}</div>
     </div>
@@ -302,12 +317,6 @@ export function renderEmailView(container, email) {
   el.querySelector('#backBtn').addEventListener('click', () => {
     navigate('inbox');
   });
-
-  el.querySelector('#boardBtnEmail').addEventListener('click', () => {
-    navigate('board');
-  });
-
-  el.querySelector('#caseFileBtnEmail').addEventListener('click', showCaseFile);
 
   el.querySelector('#starBtnEmail').addEventListener('click', () => {
     toggleStar(email.id);

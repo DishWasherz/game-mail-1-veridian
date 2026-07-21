@@ -45,24 +45,30 @@ export function setFolder(folder) {
 
 export function getEmailsForCurrentFolder() {
   const folder = getCurrentFolder();
+  const key = state.currentInbox;
 
-  if (state.currentInbox === 'daniel') {
+  if (key === 'daniel') {
     if (folder === 'sent' || folder === 'drafts') return [];
     let emails = [...emailData.act1];
     if (state.efbDelivered) {
       emails.unshift({ ...emailData.efb, date: GAME_TODAY, _isDynamic: true });
     }
     if (state.finalBatchDelivered) {
-      // F1 is shown as forensics popup, only F2 and F3 arrive as emails
       const fb = emailData.finalBatch.slice(1).map((e, i) => ({
         ...e, date: GAME_TODAY, _isDynamic: true, _fbOrder: i
       }));
       emails.unshift(...fb);
     }
+    if (folder === 'starred') {
+      return emails.filter(e => state.starredEmails[key]?.includes(e.id));
+    }
     return emails;
   }
 
-  if (state.currentInbox === 'sarah') {
+  if (key === 'sarah') {
+    if (folder === 'starred') {
+      return emailData.act2.filter(e => state.starredEmails[key]?.includes(e.id));
+    }
     if (folder === 'sent') {
       return emailData.act2.filter(e => e.from === 'sarahc@gmail.com');
     }
