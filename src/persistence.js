@@ -8,10 +8,15 @@ const DEFAULT_STATE = {
   efbDelivered: false,
   boardState: { killer: '', location: '', motive: '' },
   boardCorrect: false,
+  boardSubmissions: 0,
   finalBatchDelivered: false,
   finalBatchRead: [],
   caseClosed: false,
-  lastBoardSubmit: 0
+  caseFileSeen: false,
+  lastBoardSubmit: 0,
+  startTime: null,
+  endTime: null,
+  bestTime: null
 };
 
 export function loadState() {

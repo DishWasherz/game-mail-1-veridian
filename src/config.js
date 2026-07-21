@@ -61,3 +61,7 @@ export const POSTHOG_KEY = __POSTHOG_KEY__;
 export const POSTHOG_HOST = __POSTHOG_HOST__;
 export const SESSION_REPLAY_ENABLED = __SESSION_REPLAY__;
 
+export const TALLY_PLAYTEST_URL = 'https://tally.so/r/5BgGoQ';
+export const TALLY_CASE02_URL = 'https://tally.so/r/9qgE0E';
+export const GAME_URL = 'https://game-mail-1-veridian.up.railway.app';
+

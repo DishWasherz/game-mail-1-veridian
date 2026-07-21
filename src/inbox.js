@@ -39,6 +39,7 @@ function matchesSearch(email, query) {
     email.subject.toLowerCase().includes(q) ||
     email.from.toLowerCase().includes(q) ||
     (email.to || '').toLowerCase().includes(q) ||
+    (email.cc || '').toLowerCase().includes(q) ||
     body.toLowerCase().includes(q)
   );
 }
@@ -161,10 +162,11 @@ export function renderInbox(container) {
         <span class="inbox-user">${accountEmail}</span>
         <button class="header-btn" id="boardBtn" title="Investigation Board">Board</button>
         <button class="header-btn" id="caseFileBtn" title="Case File">Case</button>
+        ${state.caseFileSeen ? '<button class="header-btn" id="caseFileEndBtn" title="Case File">File</button>' : ''}
         <button class="header-btn" id="logoutBtn">Sign Out</button>
       </div>
     </header>
-    ${state.caseClosed ? '<div class="case-closed-banner">Case closed. <span class="case-closed-credits">Game Mail, Case 01. Case 02, someday.</span></div>' : ''}
+    ${(state.caseClosed && !state.caseFileSeen) ? '<div class="case-closed-banner" id="caseClosedBanner">Investigation closed. View the case file.</div>' : ''}
     <div class="folder-tabs">${folderTabsHtml}</div>
     <div class="inbox-toolbar">
       <input type="text" class="inbox-search" id="inboxSearch" placeholder="Search emails..." value="${searchTerm}">
@@ -202,6 +204,15 @@ export function renderInbox(container) {
     });
   }
 
+  // Case closed banner
+  const closedBanner = el.querySelector('#caseClosedBanner');
+  if (closedBanner) {
+    closedBanner.addEventListener('click', () => {
+      setState({ caseFileSeen: true });
+      navigate('casefile');
+    });
+  }
+
   // Folder tabs
   el.querySelectorAll('.folder-tab').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -231,6 +242,11 @@ export function renderInbox(container) {
   });
 
   el.querySelector('#logoutBtn').addEventListener('click', handleLogout);
+
+  const caseFileEndBtn = el.querySelector('#caseFileEndBtn');
+  if (caseFileEndBtn) {
+    caseFileEndBtn.addEventListener('click', () => navigate('casefile'));
+  }
 
   el.querySelector('#boardBtn').addEventListener('click', () => {
     navigate('board');
@@ -323,7 +339,10 @@ function checkCaseClosed() {
   if (state.caseClosed) return;
   const allFbRead = ['F2', 'F3'].every(id => state.finalBatchRead.includes(id));
   if (allFbRead) {
-    setState({ caseClosed: true });
+    const endTime = Date.now();
+    const duration = state.startTime ? endTime - state.startTime : 0;
+    const bestTime = state.bestTime ? Math.min(state.bestTime, duration) : duration;
+    setState({ caseClosed: true, endTime, bestTime });
     trackEvent('case_closed', {});
   }
 }

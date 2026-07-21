@@ -176,7 +176,8 @@ function handleSubmit(el) {
 
   if (!killer || !location || !motive) return;
 
-  setState({ lastBoardSubmit: Date.now() });
+  const state2 = getState();
+  setState({ lastBoardSubmit: Date.now(), boardSubmissions: (state2.boardSubmissions || 0) + 1 });
 
   const killerOk = checkField('killer', killer);
   const locationOk = checkField('location', location);

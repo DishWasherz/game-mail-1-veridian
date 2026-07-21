@@ -5,6 +5,7 @@ import { renderInbox, renderEmailView } from './inbox.js';
 import { renderLogin } from './login.js';
 import { renderForensics } from './forensics.js';
 import { renderBoard } from './board.js';
+import { renderCaseFile } from './casefile.js';
 import { initAnalytics, trackEvent } from './analytics.js';
 import {
   EFB_THRESHOLDS, MISSING_CATEGORIES, AFFAIR_CATEGORIES, GAME_TODAY
@@ -75,6 +76,7 @@ export function markEmailRead(emailId, inbox) {
   if (!state.openedEmails[key]) state.openedEmails[key] = [];
   if (!state.openedEmails[key].includes(emailId)) {
     state.openedEmails[key].push(emailId);
+    if (!state.startTime) state.startTime = Date.now();
     saveState(state);
 
     let eventId;
@@ -248,6 +250,9 @@ function render(params = {}) {
       break;
     case 'board':
       renderBoard(app);
+      break;
+    case 'casefile':
+      renderCaseFile(app);
       break;
   }
 }

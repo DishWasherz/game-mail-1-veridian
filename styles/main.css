@@ -816,21 +816,156 @@ html, body {
   color: var(--text-secondary);
 }
 
-/* Case Closed */
+/* Case Closed Banner */
 .case-closed-banner {
-  padding: 12px 20px;
+  padding: 10px 20px;
   background: #f0faf0;
   border-bottom: 1px solid #d4e8d4;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 500;
   color: var(--success);
   text-align: center;
+  cursor: pointer;
 }
 
-.case-closed-credits {
+.case-closed-banner:hover {
+  background: #e4f5e4;
+}
+
+/* Case File Screen */
+.casefile-screen {
+  min-height: 100vh;
+}
+
+.casefile-container {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.casefile-folder {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.casefile-folder-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: #fafafa;
+  border-bottom: 1px solid var(--border);
+}
+
+.casefile-folder-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.casefile-stamp {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  border-radius: 3px;
+  border: 2px solid;
+}
+
+.stamp-closed {
+  color: var(--success);
+  border-color: var(--success);
+}
+
+.stamp-pending {
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+.casefile-folder-body {
+  padding: 20px;
+}
+
+.casefile-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.casefile-stat {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.casefile-stat-value {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.casefile-epilogue {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-bottom: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-light);
+}
+
+.casefile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-light);
+}
+
+.casefile-credits {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.casefile-link {
+  font-size: 13px;
+  color: var(--accent);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+}
+
+.casefile-link:hover {
+  text-decoration: underline;
+}
+
+.casefile-reset {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-light);
+}
+
+.casefile-reset-btn {
+  color: var(--text-muted);
+}
+
+.casefile-best-time {
   display: block;
   font-size: 12px;
   color: var(--text-muted);
   margin-top: 4px;
+}
+
+.casefile-pending-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
 }
 
 /* Mobile */
