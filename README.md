@@ -2,7 +2,7 @@
 
 Browser-based detective mystery disguised as a webmail client.
 
-Push to main deploys automatically via Railway.
+Railway deploys the `production` branch. See "Deploying" below.
 
 ## Run locally
 
@@ -21,15 +21,27 @@ npm run build
 
 Output in `dist/`. Served in production by `npm start` (uses `serve -s` for SPA fallback).
 
-## Deploy (Railway)
+## Deploying
 
-Railway auto-deploys on push to main. Required environment variables:
+`main` is the working branch and does not deploy. Railway deploys the `production` branch.
+
+To ship:
+
+```
+git checkout production && git merge main && git push
+```
+
+Never commit directly to production. Never force-push it.
+
+## Railway config
+
+Required environment variables:
 
 - `POSTHOG_KEY` — PostHog project API key
 - `POSTHOG_HOST` — PostHog ingest host (e.g. `https://eu.i.posthog.com`)
 - `SESSION_REPLAY` — `true` for playtest builds, omit or `false` for public launch
 
-Railway config: build command `npm run build`, start command `npm start`. The `PORT` env var is provided by Railway automatically.
+Build command `npm run build`, start command `npm start`. `PORT` is provided by Railway.
 
 ## Content pipeline
 
