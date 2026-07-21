@@ -167,6 +167,7 @@ export function renderInbox(container) {
         <button class="sidebar-folder" id="sidebarCaseFileBtn">${state.caseFileSeen ? 'Case File' : 'Case File'}</button>
       </nav>
     </aside>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
     <main class="mail-main">
       <header class="mail-topbar">
         <button class="hamburger-btn" id="hamburgerBtn">&#9776;</button>
@@ -227,6 +228,8 @@ export function renderInbox(container) {
   // Sidebar folders
   el.querySelectorAll('.sidebar-folder[data-folder]').forEach(btn => {
     btn.addEventListener('click', () => {
+      sidebar.classList.remove('sidebar-open');
+      backdrop.classList.remove('visible');
       setFolder(btn.dataset.folder);
       searchTerm = '';
       navigate('inbox');
@@ -255,8 +258,15 @@ export function renderInbox(container) {
   });
 
   // Mobile hamburger
+  const sidebar = el.querySelector('#sidebar');
+  const backdrop = el.querySelector('#sidebarBackdrop');
   el.querySelector('#hamburgerBtn').addEventListener('click', () => {
-    el.querySelector('#sidebar').classList.toggle('sidebar-open');
+    sidebar.classList.add('sidebar-open');
+    backdrop.classList.add('visible');
+  });
+  backdrop.addEventListener('click', () => {
+    sidebar.classList.remove('sidebar-open');
+    backdrop.classList.remove('visible');
   });
 }
 
