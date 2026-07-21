@@ -57,7 +57,7 @@ export const BOARD_KEYWORDS = {
 export const MISSING_CATEGORIES = ['MISSING'];
 export const AFFAIR_CATEGORIES = ['AFFAIR'];
 
-export const POSTHOG_KEY = 'phc_wM4ZCMWMHdtUktfbMZgyTeZGjEJnytmC2NffK2FEdRTR';
-export const POSTHOG_HOST = 'https://eu.i.posthog.com';
-export const SESSION_REPLAY_ENABLED = true;
+export const POSTHOG_KEY = __POSTHOG_KEY__;
+export const POSTHOG_HOST = __POSTHOG_HOST__;
+export const SESSION_REPLAY_ENABLED = __SESSION_REPLAY__;
 

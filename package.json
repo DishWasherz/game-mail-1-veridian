@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "node build/parse-content.cjs && vite build",
+    "start": "serve dist -s -l tcp://0.0.0.0:${PORT:-3000}",
     "preview": "vite preview",
     "parse": "node build/parse-content.cjs",
     "test": "node build/test-flow.cjs"
@@ -14,6 +15,7 @@
     "vite": "^5.0.0"
   },
   "dependencies": {
-    "posthog-js": "^1.405.3"
+    "posthog-js": "^1.405.3",
+    "serve": "^14.2.6"
   }
 }

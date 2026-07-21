@@ -8,6 +8,7 @@ let initialized = false;
 
 export function initAnalytics() {
   if (isLocalhost) return;
+  if (!POSTHOG_KEY) return;
 
   posthog.init(POSTHOG_KEY, {
     api_host: POSTHOG_HOST,
