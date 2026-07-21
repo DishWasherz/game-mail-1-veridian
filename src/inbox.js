@@ -164,8 +164,7 @@ export function renderInbox(container) {
       <nav class="sidebar-section">
         <span class="sidebar-section-label">INVESTIGATION</span>
         <button class="sidebar-folder" id="sidebarBoardBtn">Board</button>
-        <button class="sidebar-folder" id="sidebarCaseFileBtn">Case File</button>
-        ${state.caseFileSeen ? '<button class="sidebar-folder" id="sidebarCaseFileEndBtn">File</button>' : ''}
+        <button class="sidebar-folder" id="sidebarCaseFileBtn">${state.caseFileSeen ? 'Case File' : 'Case File'}</button>
       </nav>
     </aside>
     <main class="mail-main">
@@ -230,12 +229,9 @@ export function renderInbox(container) {
     btn.addEventListener('click', () => {
       setFolder(btn.dataset.folder);
       searchTerm = '';
-      showStarredOnly = false;
       navigate('inbox');
     });
   });
-
-  // Sidebar starred acts as a folder filter
   el.querySelector('#inboxSearch').addEventListener('input', (e) => {
     searchTerm = e.target.value;
     updateEmailList(el);
@@ -250,12 +246,13 @@ export function renderInbox(container) {
   el.querySelector('#logoutBtn').addEventListener('click', handleLogout);
 
   el.querySelector('#sidebarBoardBtn').addEventListener('click', () => navigate('board'));
-  el.querySelector('#sidebarCaseFileBtn').addEventListener('click', showCaseFile);
-
-  const caseFileEndBtn = el.querySelector('#sidebarCaseFileEndBtn');
-  if (caseFileEndBtn) {
-    caseFileEndBtn.addEventListener('click', () => navigate('casefile'));
-  }
+  el.querySelector('#sidebarCaseFileBtn').addEventListener('click', () => {
+    if (state.caseFileSeen) {
+      navigate('casefile');
+    } else {
+      showCaseFile();
+    }
+  });
 
   // Mobile hamburger
   el.querySelector('#hamburgerBtn').addEventListener('click', () => {
