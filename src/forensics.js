@@ -18,7 +18,7 @@ export function renderForensics(container) {
           <div><strong>Password:</strong> ${credentials.daniel.password}</div>
         </div>
         <p>The password is his, by the way. Not one we set. Make of that what you will.</p>
-        <p>When you think you have the full picture, put it on the investigation board: the who, the where, the why. The DA won't move on half a theory, so make sure it holds together before you submit.</p>
+        <p>When you think you have the full picture, put it on the investigation board: the who, the where, the why. The DA won't move on half a theory, so make sure it holds together before you submit. Everything you need is in his mailbox. No fieldwork, just read carefully.</p>
         <p>Good hunting ;)<br>M., Digital Forensics</p>
       </div>
       <button class="forensics-btn" id="forensicsClose">Go to the login screen</button>

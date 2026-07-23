@@ -1,7 +1,7 @@
 import {
   navigate, getState, getEmailsForCurrentFolder, getCurrentInbox, getCurrentFolder,
   setFolder, markEmailRead, toggleStar, isEmailRead, isEmailStarred,
-  handleLogout, injectPassword, setState, showCaseFile
+  handleLogout, injectPassword, setState, showCaseFile, showIntranetError
 } from './app.js';
 import { GAME_TODAY } from './config.js';
 import { trackEvent } from './analytics.js';
@@ -331,8 +331,19 @@ export function renderEmailView(container, email) {
     btn.classList.toggle('starred', isEmailStarred(email.id));
   });
 
+  // Intranet links
+  el.querySelectorAll('.intranet-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      showIntranetError();
+    });
+  });
+
   const onEscape = (e) => {
     if (e.key === 'Escape') {
+      // Close intranet overlay if open, otherwise go back
+      const intranet = document.querySelector('.intranet-overlay');
+      if (intranet) { intranet.remove(); return; }
       document.removeEventListener('keydown', onEscape);
       navigate('inbox');
     }
@@ -367,8 +378,15 @@ function formatBody(body) {
   let html = body
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/\n/g, '<br>');
+    .replace(/>/g, '&gt;');
+
+  // Linkify intranet URLs
+  html = html.replace(
+    /((?:intranet|hr-portal|finance|docs)\.veridian-corp\.com[^\s<]*)/g,
+    '<a href="#" class="intranet-link" data-intranet="true">$1</a>'
+  );
+
+  html = html.replace(/\n/g, '<br>');
 
   html = html.replace(
     /(---------- Forwarded message ----------[\s\S]*)/,

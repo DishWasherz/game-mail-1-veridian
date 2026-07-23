@@ -92,7 +92,8 @@ const BOARD_KEYWORDS = {
     fail: ['richard', 'hale', 'daniel', 'hartman']
   },
   location: {
-    pass: ['greenside', 'padel', 'club basement', 'storage room'],
+    club: ['greenside', 'padel'],
+    space: ['basement', 'storage', 'downstairs', 'back room', 'underneath', 'below'],
     fail: []
   },
   motive: {
@@ -110,17 +111,28 @@ function normalizeAnswer(text) {
 function checkField(field, value) {
   const normalized = normalizeAnswer(value);
   if (!normalized) return false;
-  const { pass, fail } = BOARD_KEYWORDS[field];
-  if (fail.length > 0 && fail.some(term => normalized.includes(term))) return false;
-  return pass.some(term => normalized.includes(term));
+  const keywords = BOARD_KEYWORDS[field];
+  if (keywords.fail && keywords.fail.length > 0 && keywords.fail.some(term => normalized.includes(term))) return false;
+  if (keywords.club) {
+    const hasClub = keywords.club.some(term => normalized.includes(term));
+    const hasSpace = keywords.space.some(term => normalized.includes(term));
+    return hasClub && hasSpace;
+  }
+  return keywords.pass.some(term => normalized.includes(term));
 }
 
 function checkAll(killer, location, motive) {
   return checkField('killer', killer) && checkField('location', location) && checkField('motive', motive);
 }
 
-// Unit test from brief: "Paul M / Padel club / Corporate theft" MUST pass
-assert(checkAll('Paul M', 'Padel club', 'Corporate theft'), '"Paul M / Padel club / Corporate theft" must pass');
+// Unit test: "Paul M / Greenside basement / Corporate theft" MUST pass
+assert(checkAll('Paul M', 'Greenside basement', 'Corporate theft'), '"Paul M / Greenside basement / Corporate theft" must pass');
+
+// Unit test: "greenside padel club" alone fails (no space term)
+assert(!checkField('location', 'greenside padel club'), '"greenside padel club" must fail (no space term)');
+
+// Unit test: "the storage room under the padel club" passes (club + space)
+assert(checkField('location', 'the storage room under the padel club'), '"the storage room under the padel club" must pass');
 
 // Unit test from brief: "Richard Hale / Company HQ / Cover up fraud" MUST fail
 assert(!checkAll('Richard Hale', 'Company HQ', 'Cover up fraud'), '"Richard Hale / Company HQ / Cover up fraud" must fail');
@@ -137,10 +149,15 @@ const fieldTests = [
   ['killer', 'Richard Hale', false],
   ['killer', 'Daniel Hartman', false],
   ['killer', 'Paul and Daniel', false],  // contains fail-term "daniel"
-  ['location', 'Greenside Padel Club', true],
-  ['location', 'the padel club', true],
+  ['location', 'Greenside Padel Club basement', true],
+  ['location', 'padel club storage room', true],
   ['location', 'greenside basement', true],
-  ['location', 'storage room', true],
+  ['location', 'greenside downstairs', true],
+  ['location', 'the back room at greenside', true],
+  ['location', 'Greenside Padel Club', false],  // no space term
+  ['location', 'padel club', false],  // no space term
+  ['location', 'storage room', false],  // no club term
+  ['location', 'basement', false],  // no club term
   ['location', 'Company headquarters', false],
   ['location', 'office', false],
   ['motive', 'corporate espionage', true],

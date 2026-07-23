@@ -25,9 +25,43 @@ export function setState(updates) {
   saveState(state);
 }
 
-export function navigate(view, params = {}) {
+export function navigate(view, params = {}, { pushState = true } = {}) {
   currentView = view;
+  if (pushState) {
+    const historyState = { view, emailId: params.email?.id || null };
+    history.pushState(historyState, '');
+  }
   render(params);
+}
+
+function handlePopState(e) {
+  const hs = e.state;
+  if (!hs) {
+    // No state: go to inbox or forensics based on game state
+    if (state.currentInbox) {
+      navigate('inbox', {}, { pushState: false });
+    } else {
+      navigate('forensics', {}, { pushState: false });
+    }
+    return;
+  }
+
+  if (hs.view === 'email' && hs.emailId) {
+    const emailData = getEmailData();
+    const allEmails = [
+      ...emailData.act1,
+      ...emailData.act2,
+      ...emailData.finalBatch,
+      emailData.efb
+    ];
+    const email = allEmails.find(e => e.id === hs.emailId);
+    if (email) {
+      navigate('email', { email }, { pushState: false });
+      return;
+    }
+  }
+
+  navigate(hs.view || 'inbox', {}, { pushState: false });
 }
 
 export function getCurrentInbox() {
@@ -196,6 +230,35 @@ export function injectPassword(body) {
   return body.replace('[RANDOMIZED]', credentials.sarah.password);
 }
 
+export function showIntranetError() {
+  const existing = document.querySelector('.intranet-overlay');
+  if (existing) { existing.remove(); return; }
+
+  const overlay = document.createElement('div');
+  overlay.className = 'intranet-overlay';
+  overlay.innerHTML = `
+    <div class="intranet-card">
+      <div class="intranet-header">Veridian Corporate Network</div>
+      <div class="intranet-body">
+        <p class="intranet-error">Connection refused.</p>
+        <p>This resource is only available from the corporate network. Remote access requires an active VPN session, and your GlobalProtect client could not establish a connection.</p>
+        <p class="intranet-note">Note: IT is currently migrating VPN clients. See "VPN Upgrade - Instructions for Remote Access" (IT Department, Jun 22) or contact helpdesk@veridian-corp.com.</p>
+      </div>
+      <button class="intranet-back-btn" id="intranetBackBtn">Back</button>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  overlay.querySelector('#intranetBackBtn').addEventListener('click', () => {
+    overlay.remove();
+  });
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+}
+
 export function showCaseFile() {
   const existing = document.querySelector('.case-file-overlay');
   if (existing) { existing.remove(); return; }
@@ -216,7 +279,7 @@ export function showCaseFile() {
           <div><strong>Password:</strong> ${credentials.daniel.password}</div>
         </div>
         <p>The password is his, by the way. Not one we set. Make of that what you will.</p>
-        <p>When you think you have the full picture, put it on the investigation board: the who, the where, the why. The DA won't move on half a theory, so make sure it holds together before you submit.</p>
+        <p>When you think you have the full picture, put it on the investigation board: the who, the where, the why. The DA won't move on half a theory, so make sure it holds together before you submit. Everything you need is in his mailbox. No fieldwork, just read carefully.</p>
         <p>Good hunting ;)<br>M., Digital Forensics</p>
       </div>
       <button class="forensics-btn" id="caseFileCloseBtn">Close</button>
@@ -276,9 +339,12 @@ export function init() {
   const fresh = !localStorage.getItem('gm_state');
   trackEvent('session_start', { fresh });
 
+  window.addEventListener('popstate', handlePopState);
+
   if (state.currentInbox) {
-    navigate('inbox');
+    navigate('inbox', {}, { pushState: false });
   } else {
-    navigate('forensics');
+    navigate('forensics', {}, { pushState: false });
   }
+  history.replaceState({ view: currentView }, '');
 }

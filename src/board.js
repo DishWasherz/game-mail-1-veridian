@@ -24,9 +24,18 @@ function normalize(text) {
 function checkField(field, value) {
   const normalized = normalize(value);
   if (!normalized) return false;
-  const { pass, fail } = BOARD_KEYWORDS[field];
-  if (fail.length > 0 && fail.some(term => normalized.includes(term))) return false;
-  return pass.some(term => normalized.includes(term));
+  const keywords = BOARD_KEYWORDS[field];
+
+  if (keywords.fail && keywords.fail.length > 0 && keywords.fail.some(term => normalized.includes(term))) return false;
+
+  // Location requires both a club term AND a space term
+  if (keywords.club) {
+    const hasClub = keywords.club.some(term => normalized.includes(term));
+    const hasSpace = keywords.space.some(term => normalized.includes(term));
+    return hasClub && hasSpace;
+  }
+
+  return keywords.pass.some(term => normalized.includes(term));
 }
 
 function checkAllAnswers(killer, location, motive) {

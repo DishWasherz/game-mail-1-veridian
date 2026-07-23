@@ -24,7 +24,8 @@ export const BOARD_OPTIONS = {
     'Veridian headquarters',
     "Daniel Hartman's residence",
     "Paul Martino's residence",
-    'Greenside Padel Club',
+    'Greenside Padel Club, main courts',
+    'Greenside Padel Club, basement storage room',
     "Emily Tan's apartment",
     'Ansible Group offices'
   ],
@@ -44,7 +45,8 @@ export const BOARD_KEYWORDS = {
     fail: ['richard', 'hale', 'daniel', 'hartman']
   },
   location: {
-    pass: ['greenside', 'padel', 'club basement', 'storage room'],
+    club: ['greenside', 'padel'],
+    space: ['basement', 'storage', 'downstairs', 'back room', 'underneath', 'below'],
     fail: []
   },
   motive: {
