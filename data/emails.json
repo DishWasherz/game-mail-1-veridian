@@ -163,7 +163,7 @@
       "subject": "Quick question",
       "thread": "T05",
       "category": "AFFAIR",
-      "body": "Hey,\n\nDid Richard say anything about the client dinner next week? He mentioned it to me in passing but I didn't catch the details. I need to book the restaurant if it's happening.\n\nAlso, I accidentally CC'd my personal email on this, ignore that. Was sending something to myself earlier and forgot to remove it.\n\nSarah"
+      "body": "Hey,\n\nDid Richard say anything about the client dinner next week? He mentioned it to me in passing but I didn't catch the details. I need to book the restaurant if it's happening.\n\nCC'ing my personal address so I have this on my phone tonight when I call them.\n\nSarah"
     },
     {
       "id": 16,
@@ -1297,7 +1297,7 @@
       "from": "Forensics Unit - Metro PD",
       "to": "Detective (player)",
       "cc": null,
-      "subject": "We found her",
+      "subject": "(delivered as the closing FORENSICS POPUP, not an email — police mail inside Daniel's mailbox would break the fiction)",
       "thread": null,
       "category": "ENDING",
       "body": "Detective,\n\nYour submission checked out. Units entered the Greenside Padel Club forty minutes ago and found Sarah Colvin in a storage room beneath the facility. Dehydrated and shaken, but alive. She's at St. Mary's now, stable, talking.\n\nPaul Martino was taken into custody at his residence without incident. He had her phone on him. We're pulling document archives out of that basement as I write this. Looks like years of material, from more companies than one.\n\nEmily Tan's case has been reclassified as a homicide. Her family has been notified.\n\nGood work, Detective. This one could have ended very differently."
