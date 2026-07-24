@@ -1089,6 +1089,65 @@ html, body {
   color: var(--text);
 }
 
+/* Case File Debrief */
+.casefile-debrief {
+  margin-bottom: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-light);
+}
+
+.casefile-debrief-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.casefile-debrief-intro {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.casefile-debrief-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.casefile-debrief-row {
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+}
+
+.casefile-debrief-row summary {
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  list-style: none;
+}
+
+.casefile-debrief-row summary::before {
+  content: '+ ';
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+.casefile-debrief-row[open] summary::before {
+  content: '- ';
+}
+
+.casefile-debrief-row p {
+  padding: 0 14px 12px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
 .casefile-epilogue {
   font-size: 13px;
   color: var(--text-secondary);

@@ -53,6 +53,36 @@ export function renderCaseFile(container) {
             <div class="casefile-stat"><span class="casefile-stat-value">${submissions}</span> board submission${submissions !== 1 ? 's' : ''}</div>
             <div class="casefile-stat"><span class="casefile-stat-value">${durationStr}</span> total investigation time</div>
           </div>
+          <div class="casefile-debrief">
+            <h3 class="casefile-debrief-title">Addendum: for the record</h3>
+            <p class="casefile-debrief-intro">Closed doesn't mean finished. Details noted during evidence review:</p>
+            <div class="casefile-debrief-rows">
+              <details class="casefile-debrief-row">
+                <summary>Five days</summary>
+                <p>Emily's email praising the padel group ("you should come play sometime") reached Sarah's work inbox on Feb 20. Paul's invitation reached her personal address on Feb 25. First the soften-up, then the close.</p>
+              </details>
+              <details class="casefile-debrief-row">
+                <summary>The same favor</summary>
+                <p>"Bring the quarterly report when you come Saturday." Paul asked Daniel for club stats in July. He had used the same sentence on Sarah months earlier, for different documents.</p>
+              </details>
+              <details class="casefile-debrief-row">
+                <summary>Last Saturday</summary>
+                <p>Paul wrote to Daniel: "Saw Sarah at Greenside last Saturday." He had. That Saturday was the storage-room meeting he had summoned her to. Every word was true.</p>
+              </details>
+              <details class="casefile-debrief-row">
+                <summary>8:47 AM</summary>
+                <p>Her badge scanned in at 8:47 on the morning of July 9. "I'm scared" went out the same day. Both sat in the file from the start.</p>
+              </details>
+              <details class="casefile-debrief-row">
+                <summary>Two passwords</summary>
+                <p>His password was her name. Hers was the rooftop place from her very first email. Neither of them knew.</p>
+              </details>
+              <details class="casefile-debrief-row">
+                <summary>The name</summary>
+                <p>Paul Martino is a perfect anagram of MANIPULATOR. Nobody at Veridian noticed either.</p>
+              </details>
+            </div>
+          </div>
           <p class="casefile-epilogue">The archive recovered from the basement references other companies. Another case for another day.</p>
           <div class="casefile-actions">
             <p class="casefile-credits">Game Mail, Case 01.</p>

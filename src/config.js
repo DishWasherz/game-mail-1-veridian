@@ -50,7 +50,7 @@ export const BOARD_KEYWORDS = {
     fail: []
   },
   motive: {
-    pass: ['espionage', 'spy', 'spying', 'intel', 'intelligence', 'information', 'documents', 'secrets', 'theft', 'stealing', 'steal', 'ansible'],
+    pass: ['espionage', 'espionnage', 'spy', 'spying', 'intel', 'intelligence', 'information', 'documents', 'secrets', 'theft', 'stealing', 'steal', 'ansible'],
     fail: ['jealous', 'jealousy', 'affair', 'fraud', 'whistleblow']
   }
 };
