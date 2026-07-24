@@ -62,8 +62,8 @@ export function renderCaseFile(container) {
                 <p>Paul used Emily to recruit Sarah. In "FW: Emily's new thing" (Daniel's inbox), Emily's forwarded note telling Sarah "you should come play sometime" is dated Feb 20. Paul's invitation to Sarah's personal address ("You should join us", in her inbox) followed on Feb 25. Emily opened the door for him, and nothing suggests she ever knew that was her role.</p>
               </details>
               <details class="casefile-debrief-row">
-                <summary>The same favor, twice</summary>
-                <p>In "Small favor" (Sarah's inbox, Apr 9), Paul asks Sarah to bring the quarterly client report to a Saturday session, supposedly for research. In "Greenside admin - quarterly report update" (Daniel's inbox, Jul 6), he asks Daniel for the quarterly report "when you come Saturday", supposedly for club statistics. He reused the method on Daniel because it had already worked on Sarah.</p>
+                <summary>The same favor, three times</summary>
+                <p>Paul ran the same ask on all three of them. Emily first: in "Re: Is this normal?" (Sarah's inbox, Apr 11), she recalls him requesting "a quarterly summary" from her department, and that she brought it. Then Sarah: in "Small favor" (Sarah's inbox, Apr 9), he asks for the quarterly client report, supposedly for research. Then Daniel: in "Greenside admin - quarterly report update" (Daniel's inbox, Jul 6), the quarterly report again, supposedly for club statistics.</p>
               </details>
               <details class="casefile-debrief-row">
                 <summary>Last Saturday</summary>
