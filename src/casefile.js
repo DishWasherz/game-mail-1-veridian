@@ -55,31 +55,31 @@ export function renderCaseFile(container) {
           </div>
           <div class="casefile-debrief">
             <h3 class="casefile-debrief-title">Addendum: for the record</h3>
-            <p class="casefile-debrief-intro">Closed doesn't mean finished. Details noted during evidence review:</p>
+            <p class="casefile-debrief-intro">You solved the case. Did you actually spot everything?</p>
             <div class="casefile-debrief-rows">
               <details class="casefile-debrief-row">
-                <summary>Five days</summary>
-                <p>Emily's email praising the padel group ("you should come play sometime") reached Sarah's work inbox on Feb 20. Paul's invitation reached her personal address on Feb 25. First the soften-up, then the close.</p>
+                <summary>Five days apart</summary>
+                <p>Paul used Emily to recruit Sarah. In "FW: Emily's new thing" (Daniel's inbox), Emily's forwarded note telling Sarah "you should come play sometime" is dated Feb 20. Paul's invitation to Sarah's personal address ("You should join us", in her inbox) followed on Feb 25. Emily opened the door for him, and nothing suggests she ever knew that was her role.</p>
               </details>
               <details class="casefile-debrief-row">
-                <summary>The same favor</summary>
-                <p>"Bring the quarterly report when you come Saturday." Paul asked Daniel for club stats in July. He had used the same sentence on Sarah months earlier, for different documents.</p>
+                <summary>The same favor, twice</summary>
+                <p>In "Small favor" (Sarah's inbox, Apr 9), Paul asks Sarah to bring the quarterly client report to a Saturday session, supposedly for research. In "Greenside admin - quarterly report update" (Daniel's inbox, Jul 6), he asks Daniel for the quarterly report "when you come Saturday", supposedly for club statistics. He reused the method on Daniel because it had already worked on Sarah.</p>
               </details>
               <details class="casefile-debrief-row">
                 <summary>Last Saturday</summary>
-                <p>Paul wrote to Daniel: "Saw Sarah at Greenside last Saturday." He had. That Saturday was the storage-room meeting he had summoned her to. Every word was true.</p>
+                <p>In "Saw Sarah at Greenside last Saturday" (Daniel's inbox, Jul 9), Paul mentions running into Sarah at the club, as if by chance. That Saturday, Jul 4, was the meeting he had ordered in "Saturday meeting - storage room" (Sarah's inbox): the club basement, 2 PM, come alone. And he sent that cheerful anecdote to Daniel on Jul 9, the same day Sarah was taken. He was making small talk with her lover hours before abducting her.</p>
               </details>
               <details class="casefile-debrief-row">
-                <summary>8:47 AM</summary>
-                <p>Her badge scanned in at 8:47 on the morning of July 9. "I'm scared" went out the same day. Both sat in the file from the start.</p>
+                <summary>When exactly did Sarah disappear?</summary>
+                <p>In "Sarah Colvin - no building access logged since July 9" (Daniel's inbox), Karen gives the exact time of Sarah's last badge scan: 8:47 AM on Thursday Jul 9. Sarah's last email, "I'm scared", went out later that same day. Put together, they answer the question: Thursday evening, after she wrote that she was scared.</p>
               </details>
               <details class="casefile-debrief-row">
                 <summary>Two passwords</summary>
-                <p>His password was her name. Hers was the rooftop place from her very first email. Neither of them knew.</p>
+                <p>Daniel's password, on the forensics note, is "sarah" followed by digits. Sarah's password, shared in "if you need to reach me after hours", starts with "rooftop". Her very first email to Daniel ("Thursday?") suggests "that place on 4th street, the one with the rooftop".</p>
               </details>
               <details class="casefile-debrief-row">
-                <summary>The name</summary>
-                <p>Paul Martino is a perfect anagram of MANIPULATOR. Nobody at Veridian noticed either.</p>
+                <summary>His name</summary>
+                <p>Rearrange the letters of PAUL MARTINO and you get MANIPULATOR.</p>
               </details>
             </div>
           </div>
